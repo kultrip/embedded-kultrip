@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kultrip Embedded Widget</title>
+  <style>
+    body { font-family: sans-serif; }
+    #kultrip-widget { margin: 40px auto; max-width: 350px; }
+  </style>
+</head>
+<body>
+  <div id="kultrip-widget"></div>
+  <script>
+    // Widget implementation
+    function createDestinationWidget(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const label = document.createElement("label");
+      label.textContent = "Enter your destination:";
+      label.setAttribute("for", "destination-input");
+      const input = document.createElement("input");
+      input.type = "text";
+      input.id = "destination-input";
+      input.placeholder = "e.g., Paris";
+      const button = document.createElement("button");
+      button.textContent = "Submit";
+      const response = document.createElement("div");
+      response.id = "destination-response";
+      response.style.marginTop = "10px";
+      button.onclick = function () {
+        const dest = input.value.trim();
+        if (dest) {
+          response.textContent = `You entered: ${dest}`;
+          if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(`You entered ${dest}`);
+            window.speechSynthesis.speak(utterance);
+          }
+        } else {
+          response.textContent = "Please enter a destination.";
+        }
+      };
+      container.appendChild(label);
+      container.appendChild(input);
+      container.appendChild(button);
+      container.appendChild(response);
+    }
+    // Initialize the widget
+    createDestinationWidget('kultrip-widget');
+  </script>
+</body>
+</html>
